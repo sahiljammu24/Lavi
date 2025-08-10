@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from langchain.tools import Tool
 from langchain_community.llms import Ollama
 from langchain_community.utilities import WikipediaAPIWrapper
-from pywhatkit import playonyt
+
 
 from Chatbot import ChatBot
 
@@ -441,13 +441,19 @@ class MediaController:
 
     @staticmethod
     def play_music_youtube(query: str = "") -> str:
+        """Play music on YouTube"""
         try:
-            playonyt(query)
-            return f'playing {query}'
-        except Exception as e:
-            print(f"[red]Error playing YouTube video: {e}[/red]")
-            return f'error playing YouTube video: {e}'
+            if not query or query.strip() == "":
+                webbrowser.open("https://music.youtube.com")
+                return "🎵 Opened YouTube Music"
+            else:
+                search_query = quote_plus(query.strip())
+                youtube_search_url = f"https://www.youtube.com/results?search_query={search_query}"
+                webbrowser.open(youtube_search_url)
+                return f"🎵 Searching YouTube for: '{query}'"
 
+        except Exception as e:
+            return f"❌ Error playing music: {str(e)}"
 
     @staticmethod
     def play_music_spotify(query: str = "") -> str:
@@ -463,6 +469,7 @@ class MediaController:
                 return f"🎵 Searching Spotify for: '{query}'"
         except Exception as e:
             return f"❌ Error opening Spotify: {str(e)}"
+
 
 class AIAgent:
     """Enhanced AI Agent with Google search and calculator"""

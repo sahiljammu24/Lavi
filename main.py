@@ -19,7 +19,7 @@ def text_to_speech(text):
     """Converts text to speech and returns the audio data as bytes."""
     try:
         # Create gTTS object
-        tts = gTTS(text=text, lang='en', tld='us',slow=False)
+        tts = gTTS(text=text, lang='en-in',slow=False)
 
         # Save audio to an in-memory file
         audio_fp = io.BytesIO()
@@ -126,3 +126,4 @@ if st.session_state.audio_to_play:
     # Clear the audio after playing so it doesn't replay on every interaction
     if not auto_play_audio:
         st.session_state.audio_to_play = None
+

@@ -14,6 +14,15 @@ def load_agent():
 agent = load_agent()
 
 
+hide_st_style = """
+                    <style>
+                    MainMenu {visibility: hidden;}
+                    headerNoPadding {visibility: hidden;}
+                    _terminalButton_rix23_138 {visibility: hidden;}
+                    header {visibility: hidden;}
+                    </style>
+                    """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 # --- Text-to-Speech Function ---
 def text_to_speech(text):
     """Converts text to speech and returns the audio data as bytes."""
@@ -39,32 +48,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="auto",
 )
-
-# --- Sidebar ---
-with st.sidebar:
-    st.title("Controls")
-    st.write("Manage the chat and settings.")
-    if st.button("Clear Chat History"):
-        st.session_state.messages = []
-        st.session_state.audio_to_play = None
-        st.rerun()
-
-    auto_play_audio = st.toggle("Auto-play Audio", value=False, help="Automatically play the assistant's response.")
-
-# --- Session State for Audio ---
-if "audio_to_play" not in st.session_state:
-    st.session_state.audio_to_play = None
-
-# --- Page Title and Subtitle ---
-st.title("Lavi AI Agent ")
-st.caption("Your friendly AI assistant with Google Search, Calculator & System Control")
-
-# --- Initialize Chat History ---
-# We use st.session_state to keep the chat history persistent across reruns
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-    # Add a welcome message to the chat
-    welcome_msg = """Hello! I'm your Lavi. I can help with:
+welcome_msg = """Hello! I'm your Lavi. I can help with:
 - 🔍 Web searches
 - 🧮 Mathematical calculations
 - 📊 Technology explanations
@@ -76,6 +60,28 @@ Try asking:
 - "Search for GTA 6 release date"
 - "Open calculator"
 """
+# --- Sidebar ---
+
+# --- Session State for Audio ---
+if "audio_to_play" not in st.session_state:
+    st.session_state.audio_to_play = None
+
+# --- Page Title and Subtitle ---
+st.title("Lavi AI Agent ")
+st.caption("Your friendly AI assistant with Google Search, Calculator & System Control")
+if st.button("Clear Chat History"):
+    st.session_state.messages = []
+    st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
+    st.session_state.audio_to_play = None
+    st.rerun()
+
+auto_play_audio = st.toggle("Auto-play Audio", value=False, help="Automatically play the assistant's response.")
+
+# --- Initialize Chat History ---
+# We use st.session_state to keep the chat history persistent across reruns
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+    # Add a welcome message to the chat
     st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
 
 # --- Display Chat History ---
@@ -98,6 +104,7 @@ if prompt := st.chat_input("What can I help you with?"):
     st.session_state.audio_to_play = None
     # Rerun to display the new message immediately
     st.rerun()
+
 
 # --- Generate and Display Assistant Response if last message was from user ---
 if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
@@ -126,4 +133,3 @@ if st.session_state.audio_to_play:
     # Clear the audio after playing so it doesn't replay on every interaction
     if not auto_play_audio:
         st.session_state.audio_to_play = None
-

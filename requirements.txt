@@ -6,10 +6,9 @@ requests
 psutil
 googlesearch-python
 duckduckgo-search
-pywhatkit
 groq
 streamlit
 gTTS
-AppOpener
 PyPDF2
 Ollama
+wikipedia

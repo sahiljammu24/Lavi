@@ -12,4 +12,3 @@ gTTS
 PyPDF2
 Ollama
 wikipedia
-pywhatkit 
